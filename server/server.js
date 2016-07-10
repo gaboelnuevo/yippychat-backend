@@ -71,7 +71,15 @@ boot(app, __dirname, function(err) {
         var accessTokenId = data.id;
 
         socket.credentials = data;
-        // auto subscribe chanels here
+        
+        var User = app.models.AppUser;
+        User.findById(userId, function(err, user){
+          user.joinedchanels({}, function(err, chanels) {
+            for (var i in chanels) {
+              socket.join(chanels[i].id);
+            }
+          });
+        });
       }
 
     });
