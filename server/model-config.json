@@ -35,5 +35,13 @@
   "Chanel": {
     "dataSource": "db",
     "public": true
+  },
+  "Message": {
+    "dataSource": "db",
+    "public": true
+  },
+  "AppUser": {
+    "dataSource": "db",
+    "public": true
   }
 }
