@@ -13,7 +13,7 @@ module.exports = function(Message) {
 	      		Message.findById(mess.id,{
   			      include: {relation: 'user'}
             },function(err,data){
-              // emit socket here
+              Message.app.io.to(mess.chanelId).emit('message',data);
               if(err){
                 cb();
               }else{
