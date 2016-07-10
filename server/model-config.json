@@ -31,5 +31,9 @@
   "Role": {
     "dataSource": "db",
     "public": false
+  },
+  "Chanel": {
+    "dataSource": "db",
+    "public": true
   }
 }
