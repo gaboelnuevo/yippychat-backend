@@ -71,12 +71,12 @@ boot(app, __dirname, function(err) {
         var accessTokenId = data.id;
 
         socket.credentials = data;
-        
+
         var User = app.models.AppUser;
         User.findById(userId, function(err, user){
-          user.joinedchanels({}, function(err, chanels) {
-            for (var i in chanels) {
-              socket.join(chanels[i].id);
+          user.joinedchannels({}, function(err, channels) {
+            for (var i in channels) {
+              socket.join(channels[i].id);
             }
           });
         });
@@ -88,17 +88,17 @@ boot(app, __dirname, function(err) {
       console.log('a user connected');
 
       socket.on('subscribe', function(chanel) {
-          console.log('joining chanel', chanel);
+          console.log('joining channel', chanel);
           socket.join(chanel);
       });
 
       socket.on('unsubscribe', function(chanel) {
-          console.log('joining chanel', chanel);
+          console.log('joining channel', chanel);
           socket.leave(chanel);
       });
 
       socket.on('receive message', function(data) {
-          console.log(socket.credentials.userId + ' received message '+ data.chanelId);
+          console.log(socket.credentials.userId + ' received message '+ data.channelId);
       });
 
       socket.on('disconnect', function(){

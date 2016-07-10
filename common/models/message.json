@@ -24,8 +24,8 @@
     },
     "chanel": {
       "type": "belongsTo",
-      "model": "Chanel",
-      "foreignKey": "chanelId"
+      "model": "Channel",
+      "foreignKey": "channelId"
     }
   },
   "acls": [],

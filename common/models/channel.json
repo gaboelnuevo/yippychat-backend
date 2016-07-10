@@ -1,6 +1,6 @@
 {
-  "name": "Chanel",
-  "plural": "chanels",
+  "name": "Channel",
+  "plural": "channels",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {

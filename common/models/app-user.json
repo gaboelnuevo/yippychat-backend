@@ -9,9 +9,9 @@
   "properties": {},
   "validations": [],
   "relations": {
-    "joinedchanels": {
+    "joinedchannels": {
       "type": "hasAndBelongsToMany",
-      "model": "Chanel",
+      "model": "Channel",
       "foreignKey": ""
     }
   },

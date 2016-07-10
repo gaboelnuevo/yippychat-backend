@@ -29,7 +29,7 @@
     "dataSource": "db",
     "public": false
   },
-  "Chanel": {
+  "Channel": {
     "dataSource": "db",
     "public": true
   },
