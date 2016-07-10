@@ -7,6 +7,9 @@
     "pretest": "jshint .",
     "posttest": "nsp check"
   },
+  "engines": {
+    "node": "6.2.0"
+  },
   "dependencies": {
     "compression": "^1.0.3",
     "cors": "^2.5.2",
