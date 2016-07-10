@@ -20,7 +20,18 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "messages": {
+      "type": "hasMany",
+      "model": "Message",
+      "foreignKey": ""
+    },
+    "users": {
+      "type": "hasAndBelongsToMany",
+      "model": "AppUser",
+      "foreignKey": ""
+    }
+  },
   "acls": [],
   "methods": {}
 }
