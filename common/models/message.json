@@ -11,9 +11,6 @@
       "type": "string",
       "required": true
     },
-    "nickname": {
-      "type": "string"
-    },
     "posted_on": {
       "type": "date"
     }
