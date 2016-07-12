@@ -1,3 +1,4 @@
+'use strict';
 var loopback = require('loopback');
 var boot = require('loopback-boot');
 
@@ -32,7 +33,7 @@ app.use(function setCurrentUser(req, res, next) {
       if (loopbackContext) {
         loopbackContext.set('currentUser', user);
       }
-    }else{
+    } else {
       return next(new Error('No user with this access token was found.'));
     }
     next();
@@ -42,66 +43,70 @@ app.use(function setCurrentUser(req, res, next) {
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
 boot(app, __dirname, function(err) {
-  if (err) throw err;
-
+  if (err) {
+    throw err;
+  }
   // start the server if `$ node server.js`
-  if (require.main === module){
+  if (require.main === module) {
     //app.start();
     app.io = require('socket.io')(app.start());
     require('socketio-auth')(app.io, {
-    authenticate: function (socket, value, callback) {
-
+      authenticate: function(socket, value, callback) {
         var AccessToken = app.models.AccessToken;
         //get credentials sent by the client
         var token = AccessToken.find({
-          where:{
-            and: [{ userId: value.userId }, { id: value.id }]
-          }
-        }, function(err, tokenDetail){
+          where: {
+            and: [{
+              userId: value.userId,
+            }, {
+              id: value.id,
+            }],
+          },
+        }, function(err, tokenDetail) {
           if (err) throw err;
-          if(tokenDetail.length){
+          if (tokenDetail.length) {
             callback(null, true);
           } else {
             callback(null, false);
           }
         }); //find function..
       }, //authenticate function..
-      postAuthenticate: function (socket, data) {
+      postAuthenticate: function(socket, data) {
         var userId = data.userId;
         var accessTokenId = data.id;
 
         socket.credentials = data;
 
         var User = app.models.AppUser;
-        User.findById(userId, function(err, user){
+        User.findById(userId, function(err, user) {
           user.joinedchannels({}, function(err, channels) {
             for (var i in channels) {
               socket.join(channels[i].id);
             }
           });
         });
-      }
+      },
 
     });
 
-    app.io.on('connection', function(socket){
+    app.io.on('connection', function(socket) {
       console.log('a user connected');
 
       socket.on('subscribe', function(chanel) {
-          console.log('joining channel', chanel);
-          socket.join(chanel);
+        console.log('joining channel', chanel);
+        socket.join(chanel);
       });
 
       socket.on('unsubscribe', function(chanel) {
-          console.log('joining channel', chanel);
-          socket.leave(chanel);
+        console.log('joining channel', chanel);
+        socket.leave(chanel);
       });
 
       socket.on('receive message', function(data) {
-          console.log(socket.credentials.userId + ' received message '+ data.channelId);
+        console.log(socket.credentials.userId + ' received message');
       });
 
-      socket.on('disconnect', function(){
+      socket.on('disconnect', function() {
         console.log('user disconnected');
       });
     });
