@@ -92,14 +92,21 @@ boot(app, __dirname, function(err) {
     app.io.on('connection', function(socket) {
       console.log('a user connected');
 
-      socket.on('subscribe', function(chanel) {
-        console.log('joining channel', chanel);
-        socket.join(chanel);
+      socket.on('subscribe', function(channel) {
+        var User = app.models.AppUser;
+        User.findById(userId, function(err, user) {
+          user.joinedchannels(
+            {where: {chanelId: channel}, limit: 1},
+            function(err, channels) {
+              if (channels.length > 0) {
+                socket.join(channel);
+              }
+            });
+        });
       });
 
-      socket.on('unsubscribe', function(chanel) {
-        console.log('joining channel', chanel);
-        socket.leave(chanel);
+      socket.on('unsubscribe', function(channel) {
+        socket.leave(channel);
       });
 
       socket.on('receive message', function(data) {

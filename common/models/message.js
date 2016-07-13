@@ -6,26 +6,35 @@ module.exports = function(Message) {
     var ctx = loopback.getCurrentContext();
     var currentUser = ctx && ctx.get('currentUser');
     if (currentUser) {
-      Message.create({
-        'content': message.content,
-        'userId': currentUser.id,
-        'chanelId': message.channelId || message.channelId,
-        'posted_at': new Date(),
-      },
-        function(err, mess) {
-          Message.findById(mess.id, {
-            include: {
-              relation: 'user',
+      currentUser.joinedchannels(
+        {where: {chanelId: message.channelId}, limit: 1},
+        function(err, records) {
+          if (records.length) {
+            Message.create({
+              'content': message.content,
+              'userId': currentUser.id,
+              'channelId': message.channelId,
+              'posted_at': new Date(),
             },
-          }, function(err, data) {
-            Message.app.io.to(mess.channelId).emit('message', data);
-            if (err) {
-              cb();
-            } else {
-              cb(null, data);
-            }
-          });
-        });
+            function(err, mess) {
+              Message.findById(mess.id, {
+                include: {
+                  relation: 'user',
+                },
+              }, function(err, data) {
+                Message.app.io.to(data.channelId).emit('message', data);
+                if (err) {
+                  cb();
+                } else {
+                  cb(null, data);
+                }
+              });
+            });
+          } else {
+            cb();
+          }
+        }
+      );
     } else {
       cb();
     }
