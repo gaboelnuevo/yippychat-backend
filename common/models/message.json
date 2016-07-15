@@ -2,8 +2,8 @@
   "name": "Message",
   "plural": "messages",
   "base": "PersistedModel",
-  "idInjection": true,
   "strict": true,
+  "idInjection": true,
   "options": {
     "validateUpsert": true
   },
@@ -12,8 +12,9 @@
       "type": "string",
       "required": true
     },
-    "posted_on": {
-      "type": "date"
+    "postedAt": {
+      "type": "date",
+      "default": "$now"
     }
   },
   "validations": [],
@@ -29,6 +30,20 @@
       "foreignKey": "channelId"
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "sendmessage"
+    }
+  ],
   "methods": {}
 }

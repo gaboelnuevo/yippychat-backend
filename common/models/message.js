@@ -4,17 +4,18 @@ var loopback = require('loopback');
 module.exports = function(Message) {
   Message.sendmessage = function(message, cb) {
     var ctx = loopback.getCurrentContext();
+    var Channel =  Message.app.models.Channel;
     var currentUser = ctx && ctx.get('currentUser');
     if (currentUser) {
       currentUser.joinedchannels(
-        {where: {chanelId: message.channelId}, limit: 1},
+        {where: {id: message.channelId}, limit: 1},
         function(err, records) {
           if (records.length) {
             Message.create({
               'content': message.content,
               'userId': currentUser.id,
               'channelId': message.channelId,
-              'posted_at': new Date(),
+              'postedAt': new Date(),
             },
             function(err, mess) {
               Message.findById(mess.id, {
@@ -22,10 +23,14 @@ module.exports = function(Message) {
                   relation: 'user',
                 },
               }, function(err, data) {
-                Message.app.io.to(data.channelId).emit('message', data);
                 if (err) {
                   cb();
                 } else {
+                  Message.app.io.to(data.channelId).emit('message', data);
+                  Channel.findById(data.channelId, function(err, channel) {
+                    channel.lastActivity = data.postedAt;
+                    channel.save({skipPropertyFilter: true});
+                  });
                   cb(null, data);
                 }
               });

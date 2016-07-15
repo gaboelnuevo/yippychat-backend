@@ -2,11 +2,14 @@
   "name": "Channel",
   "plural": "channels",
   "base": "PersistedModel",
-  "idInjection": true,
   "strict": true,
+  "idInjection": true,
   "options": {
     "validateUpsert": true
   },
+  "protected": [
+    "location"
+  ],
   "properties": {
     "name": {
       "type": "string",
@@ -17,6 +20,18 @@
     },
     "icon": {
       "type": "string"
+    },
+    "createdAt": {
+      "type": "date",
+      "default": "$now"
+    },
+    "updatedAt": {
+      "type": "date",
+      "default": "$now"
+    },
+    "lastActivity": {
+      "type": "date",
+      "default": "$now"
     },
     "color": {
       "type": "string"
@@ -36,9 +51,79 @@
     "users": {
       "type": "hasAndBelongsToMany",
       "model": "AppUser",
-      "foreignKey": ""
+      "foreignKey": "userId"
     }
   },
-  "acls": [],
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "nearby"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "channelMember",
+      "permission": "ALLOW",
+      "property": "findById"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW",
+      "property": "create"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "channelMember",
+      "permission": "ALLOW",
+      "property": "__get__messages"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "channelMember",
+      "permission": "ALLOW",
+      "property": "__count__messages"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "channelMember",
+      "permission": "ALLOW",
+      "property": "__get__users"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "channelMember",
+      "permission": "ALLOW",
+      "property": "__count__users"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "channelAdmin",
+      "permission": "ALLOW",
+      "property": "updateById"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "channelAdmin",
+      "permission": "ALLOW",
+      "property": "destroyById"
+    }
+  ],
   "methods": {}
 }

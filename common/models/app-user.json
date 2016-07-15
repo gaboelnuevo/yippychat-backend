@@ -13,7 +13,7 @@
     "joinedchannels": {
       "type": "hasAndBelongsToMany",
       "model": "Channel",
-      "foreignKey": ""
+      "foreignKey": "channelId"
     }
   },
   "acls": [
