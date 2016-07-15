@@ -577,21 +577,19 @@ var iconsList = [
 ];
 
 module.exports = function(Channel) {
-  function isColor() {
-    var str = '(^)#([\da-fA-F]{2})([\da-fA-F]{2})([\da-fA-F]{2})($)';
-    var regex = new RegExp(str);
-    var color = this.color;
-    return regex.test(color);
-  }
+  var regexColor = /^#([\da-fA-F]{2})([\da-fA-F]{2})([\da-fA-F]{2})$/;
+  var regexHastag = /^#([a-zA-Z\d]+)$/;
 
-  function isHastag() {
-    var regex =  new RegExp('(^)#([a-zA-Z\d]+)($)');
-    var name = this.name;
-    return regex.test(name);
-  }
-
-  Channel.validate('color', isColor, {message: 'Invalid color!'});
-  Channel.validate('name', isHastag, {message: 'Invalid Channel name!'});
+  Channel.validatesFormatOf('color',
+    {
+      with: regexColor,
+      message: 'Must provide a valid color!',
+    });
+  Channel.validatesFormatOf('name',
+    {
+      with: regexHastag,
+      message: 'Must provide a valid name!',
+    });
   Channel.validatesInclusionOf('icon', {'in': iconsList});
 
   var FILTERED_PROPERTIES = ['createdAt', 'updatedAt'];
