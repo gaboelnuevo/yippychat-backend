@@ -592,6 +592,11 @@ module.exports = function(Channel) {
     });
   Channel.validatesInclusionOf('icon', {'in': iconsList});
 
+  Channel.beforeRemote('create', function(ctx, modelInstance, next) {
+    ctx.args.data.ownerId = ctx.req.accessToken.userId;
+    next();
+  });
+
   var FILTERED_PROPERTIES = ['createdAt', 'updatedAt'];
   Channel.observe('before save', function filterProperties(ctx, next) {
     if (ctx.options && ctx.options.skipPropertyFilter) return next();

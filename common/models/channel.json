@@ -10,6 +10,7 @@
   "protected": [
     "location"
   ],
+  "hidden": ["ownerId"],
   "properties": {
     "name": {
       "type": "string",
@@ -52,6 +53,14 @@
       "type": "hasAndBelongsToMany",
       "model": "AppUser",
       "foreignKey": "userId"
+    },
+    "owner": {
+      "type": "hasOne",
+      "model": "AppUser",
+      "foreignKey": "ownerId",
+      "options": {
+        "disableInclude": true
+      }
     }
   },
   "acls": [

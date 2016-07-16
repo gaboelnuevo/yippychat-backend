@@ -18,9 +18,8 @@ module.exports = function(app) {
     });
   }
 
-  function checkIsAdmin(userId, channelId, cb) {
-    // Not implemented yet
-    cb(null, true);
+  function checkIsAdmin(userId, channel, cb) {
+    cb(null, channel.ownerId === userId);
   }
 
   Role.registerResolver('channelMember', function(role, context, cb) {
