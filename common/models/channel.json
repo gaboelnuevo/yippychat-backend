@@ -44,6 +44,14 @@
     },
     "people": {
       "type": "integer"
+    },
+    "public": {
+      "type": "boolean",
+      "default": true
+    },
+    "channelType": {
+      "type": "string",
+      "default": "chatroom"
     }
   },
   "validations": [],

@@ -591,6 +591,7 @@ module.exports = function(Channel) {
       message: 'Must provide a valid name!',
     });
   Channel.validatesInclusionOf('icon', {'in': iconsList});
+  Channel.validatesInclusionOf('channelType', {'in': ['chatroom']});
 
   Channel.beforeRemote('create', function(ctx, modelInstance, next) {
     ctx.args.data.ownerId = ctx.req.accessToken.userId;
