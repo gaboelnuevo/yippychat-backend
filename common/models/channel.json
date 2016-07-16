@@ -43,7 +43,8 @@
       "required": true
     },
     "people": {
-      "type": "integer"
+      "type": "number",
+      "default": 0
     },
     "public": {
       "type": "boolean",

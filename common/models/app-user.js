@@ -7,13 +7,17 @@ module.exports = function(AppUser) {
     var currentUser = ctx && ctx.get('currentUser');
     if (currentUser) {
       AppUser.app.models.Channel.findById(channelId, function(err, channel) {
-        currentUser.joinedchannels.add(channel, function(err, res) {
-          if (!err) {
-            channel.people++;
-            channel.save({skipPropertyFilter: true});
-          }
-          cb();
-        });
+        if (channel && (channel.public || channel.ownerId == currentUser.id)) {
+          currentUser.joinedchannels.add(channel, function(err, res) {
+            if (!err) {
+              channel.people++;
+              channel.save({skipPropertyFilter: true});
+            }
+            cb();
+          });
+        } else {
+          cb(null, false);
+        }
       });
     } else {
       cb();

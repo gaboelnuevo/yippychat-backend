@@ -627,6 +627,7 @@ module.exports = function(Channel) {
         location: {
           near: here,
         },
+        public: true,
       },
       limit: 100,
     },
