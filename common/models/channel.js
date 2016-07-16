@@ -597,7 +597,13 @@ module.exports = function(Channel) {
     next();
   });
 
-  var FILTERED_PROPERTIES = ['createdAt', 'updatedAt'];
+  var FILTERED_PROPERTIES = [
+    'createdAt',
+    'updatedAt',
+    'lastActivity',
+    'people',
+  ];
+
   Channel.observe('before save', function filterProperties(ctx, next) {
     if (ctx.options && ctx.options.skipPropertyFilter) return next();
     if (ctx.instance) {

@@ -8,6 +8,10 @@ module.exports = function(AppUser) {
     if (currentUser) {
       AppUser.app.models.Channel.findById(channelId, function(err, channel) {
         currentUser.joinedchannels.add(channel, function(err, res) {
+          if (!err) {
+            channel.people++;
+            channel.save({skipPropertyFilter: true});
+          }
           cb();
         });
       });

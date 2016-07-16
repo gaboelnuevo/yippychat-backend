@@ -8,7 +8,8 @@
     "validateUpsert": true
   },
   "protected": [
-    "location"
+    "location",
+    "people"
   ],
   "hidden": ["ownerId"],
   "properties": {
@@ -40,6 +41,9 @@
     "location": {
       "type": "geopoint",
       "required": true
+    },
+    "people": {
+      "type": "integer"
     }
   },
   "validations": [],
